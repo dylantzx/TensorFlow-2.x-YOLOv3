@@ -12,7 +12,8 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.layers import Conv2D, Input, LeakyReLU, ZeroPadding2D, BatchNormalization, MaxPool2D
 from tensorflow.keras.regularizers import l2
-from yolov3.configs import *
+# from yolov3.configs import *
+from TensorFlow_Yolo.yolov3.configs import *
 
 STRIDES         = np.array(YOLO_STRIDES)
 ANCHORS         = (np.array(YOLO_ANCHORS).T/STRIDES).T
@@ -401,7 +402,6 @@ def Create_Yolo(input_size=416, channels=3, training=False, CLASSES=YOLO_COCO_CL
         pred_tensor = decode(conv_tensor, NUM_CLASS, i)
         if training: output_tensors.append(conv_tensor)
         output_tensors.append(pred_tensor)
-
     Yolo = tf.keras.Model(input_layer, output_tensors)
     return Yolo
 

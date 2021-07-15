@@ -15,8 +15,10 @@ import random
 import colorsys
 import numpy as np
 import tensorflow as tf
-from yolov3.configs import *
-from yolov3.yolov4 import *
+# from yolov3.configs import *
+# from yolov3.yolov4 import *
+from TensorFlow_Yolo.yolov3.configs import *
+from TensorFlow_Yolo.yolov3.yolov4 import *
 from tensorflow.python.saved_model import tag_constants
 
 def load_yolo_weights(model, weights_file):
@@ -91,10 +93,10 @@ def Load_Yolo_model():
             yolo = Create_Yolo(input_size=YOLO_INPUT_SIZE, CLASSES=YOLO_COCO_CLASSES)
             load_yolo_weights(yolo, Darknet_weights) # use Darknet weights
         else:
-            checkpoint = f"./checkpoints/{TRAIN_MODEL_NAME}"
+            checkpoint = f"/home/dylan/catkin_ws/src/yolo_ros/src/TensorFlow_Yolo/checkpoints/{TRAIN_MODEL_NAME}"
             if TRAIN_YOLO_TINY:
                 checkpoint += "_Tiny"
-            print("Loading custom weights from:", checkpoint)
+            print("\nLOADING CUSTOM WEIGHTS FROM:", checkpoint)
             yolo = Create_Yolo(input_size=YOLO_INPUT_SIZE, CLASSES=TRAIN_CLASSES)
             yolo.load_weights(checkpoint)  # use custom weights
         
