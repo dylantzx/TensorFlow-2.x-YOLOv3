@@ -52,6 +52,7 @@ def Object_tracking(Yolo, video_path, output_path, input_size=416, show=False, C
     NUM_CLASS = read_class_names(CLASSES)
     key_list = list(NUM_CLASS.keys()) 
     val_list = list(NUM_CLASS.values())
+    print(NUM_CLASS)
     while True:
         _, frame = vid.read()
 
@@ -66,15 +67,19 @@ def Object_tracking(Yolo, video_path, output_path, input_size=416, show=False, C
         image_data = image_data[np.newaxis, ...].astype(np.float32)
 
         t1 = time.time()
-        if YOLO_FRAMEWORK == "tf":
-            pred_bbox = Yolo.predict(image_data)
-        elif YOLO_FRAMEWORK == "trt":
-            batched_input = tf.constant(image_data)
-            result = Yolo(batched_input)
-            pred_bbox = []
-            for key, value in result.items():
-                value = value.numpy()
-                pred_bbox.append(value)
+        # if YOLO_FRAMEWORK == "tf":
+        #     pred_bbox = Yolo.predict(image_data)
+
+        # elif YOLO_FRAMEWORK == "trt":
+        #     batched_input = tf.constant(image_data)
+        #     result = Yolo(batched_input)
+        #     pred_bbox = []
+        #     for key, value in result.items():
+        #         value = value.numpy()
+        #         pred_bbox.append(value)
+
+        batched_input = tf.constant(image_data)
+        pred_bbox = Yolo(batched_input)
         
         #t1 = time.time()
         #pred_bbox = Yolo.predict(image_data)
@@ -85,6 +90,8 @@ def Object_tracking(Yolo, video_path, output_path, input_size=416, show=False, C
 
         bboxes = postprocess_boxes(pred_bbox, original_frame, input_size, score_threshold)
         bboxes = nms(bboxes, iou_threshold, method='nms')
+        
+        print(f"{bboxes}")
 
         # extract bboxes to boxes (x, y, width, height), scores and names
         boxes, scores, names = [], [], []
@@ -93,6 +100,8 @@ def Object_tracking(Yolo, video_path, output_path, input_size=416, show=False, C
                 boxes.append([bbox[0].astype(int), bbox[1].astype(int), bbox[2].astype(int)-bbox[0].astype(int), bbox[3].astype(int)-bbox[1].astype(int)])
                 scores.append(bbox[4])
                 names.append(NUM_CLASS[int(bbox[5])])
+
+        print(f"{boxes}, {scores}, {names}")
 
         # Obtain all the detections for the given frame.
         boxes = np.array(boxes) 
