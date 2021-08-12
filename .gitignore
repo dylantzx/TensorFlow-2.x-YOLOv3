@@ -1,5 +1,7 @@
 **/checkpoints/yolov4_custom.data-00000-of-00001
+**/checkpoints/yolov4-*
 
 *.weights
 
 __pycache__/
+ *.pyc
