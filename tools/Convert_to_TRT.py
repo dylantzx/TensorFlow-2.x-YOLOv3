@@ -34,7 +34,7 @@ def calibration_input():
 conversion_params = trt.DEFAULT_TRT_CONVERSION_PARAMS
 conversion_params = conversion_params._replace(max_workspace_size_bytes=4000000000)
 conversion_params = conversion_params._replace(precision_mode=YOLO_TRT_QUANTIZE_MODE)
-conversion_params = conversion_params._replace(max_batch_size=1)
+# # conversion_params = conversion_params._replace(max_batch_size=8)
 if YOLO_TRT_QUANTIZE_MODE == 'INT8':
     conversion_params = conversion_params._replace(use_calibration=True)
 
